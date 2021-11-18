@@ -1,0 +1,19 @@
+{
+  "name": "booking",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.4.4",
+    "@grpc/proto-loader": "^0.6.7",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.13",
+    "winston": "^3.3.3"
+  }
+}
