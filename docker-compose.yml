@@ -1,0 +1,64 @@
+version: '3.7'
+
+services:
+  auth:
+    image: superbxp/challenge-devops-auth:latest
+    build:
+      context: .
+      dockerfile: ./auth/Dockerfile
+    restart: unless-stopped
+    ports:
+    - 4000:3000/tcp
+    environment:
+      MONGODB_URL: mongodb://superb:superb@mongodb:27017/superb
+    depends_on:
+    - mongodb
+  booking:
+    image: superbxp/challenge-devops-booking:latest
+    build:
+      context: .
+      dockerfile: ./booking/Dockerfile
+    restart: unless-stopped
+    ports:
+    - 4100:3000/tcp
+    - 4101:3000/tcp
+    environment:
+      MONGODB_URL: mongodb://superb:superb@mongodb:27017/superb
+    depends_on:
+    - mongodb
+  graphql:
+    image: superbxp/challenge-devops-graphql:latest
+    build:
+      context: .
+      dockerfile: ./graphql/Dockerfile
+    restart: unless-stopped
+    ports:
+    - 4200:3000/tcp
+    environment:
+      BOOKING_SERVICE_URI: booking:3000
+      AUTH_SERVICE_URI: http://auth:3000
+    depends_on:
+    - booking
+    - auth
+  client:
+    image: superbxp/challenge-devops-client:latest
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    restart: unless-stopped
+    ports:
+    - 4300:80/tcp
+  mongodb:
+    image: mongo:5.0.4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: superb
+      MONGO_INITDB_ROOT_PASSWORD: superb
+    restart: unless-stopped
+    volumes:
+    - mongodbdata:/data/db
+    ports:
+    - 27017:27017/tcp
+
+volumes:
+  mongodbdata:
+    name: mongodbdata
