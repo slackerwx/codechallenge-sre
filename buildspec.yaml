@@ -30,31 +30,23 @@ phases:
   build: # Build Docker image and tag it with the commit sha
     commands:
       - echo Building AUTH docker image...
-      - docker build -t $AUTH_REPOSITORY_URI:latest -file auth/Dockerfile .
-      - docker tag $AUTH_REPOSITORY_URI:latest $AUTH_REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t $AUTH_REPOSITORY_URI -f auth/Dockerfile .
       - echo Building BOOKING docker image...
-      - docker build -t $BOOKING_REPOSITORY_URI:latest -file booking/Dockerfile .
-      - docker tag $BOOKING_REPOSITORY_URI:latest $BOOKING_REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t $BOOKING_REPOSITORY_URI -f booking/Dockerfile .
       - echo Building CLIENT docker image...
-      - docker build -t $CLIENT_REPOSITORY_URI:latest -file client/Dockerfile .
-      - docker tag $CLIENT_REPOSITORY_URI:latest $CLIENT_REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t $CLIENT_REPOSITORY_URI -f client/Dockerfile .
       - echo Building GRAPHQL docker image...
-      - docker build -t $GRAPHQL_REPOSITORY_URI:latest -file graphql/Dockerfile .
-      - docker tag $GRAPHQL_REPOSITORY_URI:latest $GRAPHQL_REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t $GRAPHQL_REPOSITORY_URI -f graphql/Dockerfile .
   post_build: # Push the Docker image to the ECR
     commands:
       - echo Pushing AUTH ECR
       - docker push $AUTH_REPOSITORY_URI:latest
-      - docker push $AUTH_REPOSITORY_URI:$IMAGE_TAG
       - echo Pushing BOOKING ECR
       - docker push $BOOKING_REPOSITORY_URI:latest
-      - docker push $BOOKING_REPOSITORY_URI:$IMAGE_TAG
       - echo Pushing CLIENT ECR
       - docker push $CLIENT_REPOSITORY_URI:latest
-      - docker push $CLIENT_REPOSITORY_URI:$IMAGE_TAG
       - echo Pushing GRAPHQL ECR
       - docker push $GRAPHQL_REPOSITORY_URI:latest
-      - docker push $GRAPHQL_REPOSITORY_URI:$IMAGE_TAG
 #   - echo Rollout new version
 #   - echo kubectl set image deployment/$DEPLOYMENT_NAME [container name]=$REPOSITORY_URI:$IMAGE_TAG
 #   - “kubectl set image deployment/$DEPLOYMENT_NAME [container name]=$REPOSITORY_URI:$IMAGE_TAG”
