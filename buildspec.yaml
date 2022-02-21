@@ -26,7 +26,7 @@ phases:
     commands:
       - echo Update kubeconfig...
 #      - aws eks update-kubeconfig --name ${EKS_NAME} --region ${REGION}
-      - kubectl version
+#      - kubectl version
   build: # Build Docker image and tag it with the commit sha
     commands:
       - echo Building AUTH docker image...
