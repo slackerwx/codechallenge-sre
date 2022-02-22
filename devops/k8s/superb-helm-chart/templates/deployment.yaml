@@ -1,0 +1,47 @@
+{{- range .Values.applications}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  labels:
+    app: {{.name}}
+spec:
+  {{- if not $.Values.autoscaling.enabled }}
+  replicas: {{ $.Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+       app: {{.name}}
+  template:
+    metadata:
+      labels:
+         app: {{.name}}
+    spec:
+      containers:
+        - name: {{ .name }}
+          image: "{{ $.Values.image.repository }}{{.name}}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          ports:
+            - name: {{.portName}}
+              containerPort: {{.containerPort}}
+              protocol: {{.protocol}}
+          {{- if .configMap}}
+          env:
+            {{- range .configMap}}
+            - name: {{.key}}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{.name}}
+                  key: {{.key}}
+          {{- end }}
+          {{- end}}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+  {{- end }}

@@ -1,0 +1,59 @@
+# Default values for superb-helm-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 984392288310.dkr.ecr.us-east-1.amazonaws.com/
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest" #FIXME
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+applications:
+  - name: auth
+    portName: auth
+    containerPort: 4000
+    targetPort: 3000
+    protocol: TCP
+    serviceType: ClusterIP
+    configMap:
+      - name: db-cm
+        key: MONGODB_URL
+  - name: booking
+    portName: booking
+    containerPort: 4100
+    targetPort: 3000
+    protocol: TCP
+    serviceType: ClusterIP
+    configMap:
+      - name: db-cm
+        key: MONGODB_URL
+  - name: client
+    portName: client
+    containerPort: 4300
+    targetPort: 80
+    serviceType: LoadBalancer
+    protocol: TCP
+  - name: graphql
+    portName: client
+    containerPort: 4200
+    targetPort: 3000
+    serviceType: ClusterIP
+    protocol: TCP
+    configMap:
+      - name: graphql-cm
+        key: BOOKING_SERVICE_URI
+      - name: graphql-cm
+        key: AUTH_SERVICE_URI

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: auth
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: 984392288310.dkr.ecr.us-east-1.amazonaws.com/auth
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          env:
+            - name: MONGODB_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: auth
+  name: auth
+spec:
+  type: ClusterIP
+  selector:
+    app: auth
+  ports:
+    - port: 4000
+      protocol: TCP
+      targetPort: 3000
+      name: auth

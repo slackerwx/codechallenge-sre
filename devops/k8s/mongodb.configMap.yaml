@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-cm
+data:
+  .env: |-
+    MONGODB_URL=mongodb://superb:superb@mongodb:27017/superb
