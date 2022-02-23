@@ -79,46 +79,18 @@ variable "privileged_mode" {
 variable "aws_region" {
   type        = string
   default     = "us-east-1"
-  description = "(Optional) AWS Region, e.g. us-east-1. Used as CodeBuild ENV variable when building Docker images. For more info: http://docs.aws.amazon.com/codebuild/latest/userguide/sample-docker.html"
+  description = "AWS Region, e.g. us-east-1. Used as CodeBuild ENV variable when building Docker images. For more info: http://docs.aws.amazon.com/codebuild/latest/userguide/sample-docker.html"
 }
 
 variable "aws_account_id" {
   type        = string
   default     = "984392288310"
-  description = "(Optional) AWS Account ID. Used as CodeBuild ENV variable when building Docker images. For more info: http://docs.aws.amazon.com/codebuild/latest/userguide/sample-docker.html"
-}
-
-#FIXME: hard-coded
-variable "vpc_id" {
-  type = string
-  default = "vpc-0f84941e7ad9e36b3"
-}
-
-#FIXME: hard-coded
-variable "subnet_public" {
-  type = string
-  default = "subnet-08fcfdd3b1a98301e"
-}
-
-#FIXME: hard-coded
-variable "subnet_private" {
-  type = string
-  default = "subnet-079479d6d6410aeab"
+  description = "AWS Account ID. Used as CodeBuild ENV variable when building Docker images. For more info: http://docs.aws.amazon.com/codebuild/latest/userguide/sample-docker.html"
 }
 
 variable "repository_name" {
   type = string
   default = "https://github.com/slackerwx/codechallenge-sre.git"
-}
-
-variable "repository_branch" {
-  default = "master"
-  type = string
-}
-
-variable "repository_owner" {
-  default = "slackerwx"
-  type = string
 }
 
 variable "environment" {
@@ -127,10 +99,6 @@ variable "environment" {
 
 variable "codebuild_bucket_name" {
   default = "superb-codebuild-ci"
-}
-
-variable "codepipeline_bucket_name" {
-  default = "superb-codepipeline-ci"
 }
 
 variable "code_build_project" {

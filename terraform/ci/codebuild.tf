@@ -77,24 +77,6 @@ resource "aws_iam_role_policy" "superb-iam-rp" {
     {
       "Effect": "Allow",
       "Action": [
-        "ec2:CreateNetworkInterfacePermission"
-      ],
-      "Resource": [
-        "arn:aws:ec2:${var.aws_region}:${var.aws_account_id}:network-interface/*"
-      ],
-      "Condition": {
-        "StringEquals": {
-          "ec2:Subnet": [
-            "arn:aws:ec2:${var.aws_region}:${var.aws_account_id}:subnet/${var.subnet_public}",
-            "arn:aws:ec2:${var.aws_region}:${var.aws_account_id}:subnet/${var.subnet_private}"
-          ],
-          "ec2:AuthorizedService": "codebuild.amazonaws.com"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
         "s3:*"
       ],
       "Resource": [
@@ -106,21 +88,6 @@ resource "aws_iam_role_policy" "superb-iam-rp" {
 }
 POLICY
 }
-
-resource "aws_security_group" "build" {
-  name   = "build"
-  vpc_id = var.vpc_id
-}
-
-resource "aws_security_group_rule" "build_egress" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.build.id
-}
-
 
 resource "aws_codebuild_project" "superb-codebuild-ci" {
   name          = var.code_build_project
@@ -165,7 +132,6 @@ resource "aws_codebuild_project" "superb-codebuild-ci" {
       location = "${aws_s3_bucket.superb-s3-ci.id}/build-log"
     }
   }
-
 
   source {
     type            = "GITHUB"
