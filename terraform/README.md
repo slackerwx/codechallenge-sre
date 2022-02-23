@@ -5,7 +5,7 @@ This is a project to deploy a simple infrastructure containing a
 - ECR for our Docker images
 - Codebuild for our pipeline
 
-![](Screen Shot 2022-02-22 at 21.37.14.png)
+![](architecture.png)
 
 ### AWS ECR
 ```

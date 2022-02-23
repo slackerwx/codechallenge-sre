@@ -1,5 +1,5 @@
 # Kubernetes
-![](../terraform/Screen Shot 2022-02-22 at 21.37.14.png)
+![](../terraform/architecture.png)
 
 ### This project contains:
 - Helm chart to deploy our applications
